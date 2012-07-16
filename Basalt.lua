@@ -16,13 +16,13 @@ Basalt = {
 }
 
 --
--- Initialize the viewport
+-- Initialize the window, viewport, and base layer
 -- @param int width The width of the window and viewport
 -- @param int height The height of the window and viewport
 -- @param string name The name of the window
 --
 function Basalt:init(width, height, name)
-    -- boilerplate setup
+
     if name == nil then
         name = 'Basalt'
     end
@@ -71,7 +71,8 @@ end
 -- @param int b Value from 0-255 representing blue
 --
 function Basalt:background_color(r, g, b)
-    color = MOAIColor.new()
+
+    local color = MOAIColor.new()
     color:setColor(r, g, b, 1)
     MOAIGfxDevice.setClearColor(color)
 end
