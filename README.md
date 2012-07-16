@@ -1,4 +1,4 @@
-Mocos (MOai COmponent System) is an [Entity-Component system](http://www.gamasutra.com/blogs/MeganFox/20101208/6590/Game_Engines_101_The_EntityComponent_Model.php) built on top of the Moai SDK. Its purpose is to provide a simplified api for performing common tasks while retaining the ability to use lower-level functionality.
+Mocos (MOai COmponent System) is an [Entity-Component system](http://www.gamasutra.com/blogs/MeganFox/20101208/6590/Game_Engines_101_The_EntityComponent_Model.php) built on top of the Moai SDK. Its purpose is to provide a high-level interface for performing common tasks while retaining the ability to use lower-level functionality.
 
 Mocos will provide some common utility methods such as initialization
 
