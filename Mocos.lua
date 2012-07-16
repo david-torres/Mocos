@@ -218,8 +218,9 @@ function Mocos.Components.Click(arg, self)
                     local e = Mocos.entities[i]
                     -- we have somthing clickable
                     if e.get('click') == true then
-                        -- check bounds
                         local prop = e.get('prop')
+
+                        -- check bounds
                         local mouse_x, mouse_y = Mocos.pointer_coords()
                         if prop:inside(mouse_x, mouse_y) then
                             e.get('click_callback')()
@@ -261,9 +262,6 @@ function Mocos.Components.Draggable(arg, self)
             -- check if we are dragging
             Mocos.shared.is_dragging = false
             if down or isDown then
-                -- get current pointer position
-                local mouse_x, mouse_y = Mocos:pointer_coords()
-
                 -- check each entity
                 for i = 1, #Mocos.entities do
                     local e = Mocos.entities[i]
@@ -271,7 +269,9 @@ function Mocos.Components.Draggable(arg, self)
                     -- if it has draggable
                     if e.get('draggable') == true then
                         local prop = e.get('prop')
+
                         -- and is within bounds
+                        local mouse_x, mouse_y = Mocos:pointer_coords()
                         if prop:inside(mouse_x, mouse_y) then
                             Mocos.shared.is_dragging = true
                         end
@@ -288,9 +288,6 @@ function Mocos.Components.Draggable(arg, self)
         local drag_mouse_move_event = function(x, y)
             -- check if we are dragging
             if Mocos.shared.is_dragging then
-
-                local mouse_x, mouse_y = Mocos:pointer_coords()
-
                 -- check each entity
                 for i = 1, #Mocos.entities do
                     local e = Mocos.entities[i]
@@ -298,7 +295,9 @@ function Mocos.Components.Draggable(arg, self)
                     -- if it has draggable
                     if e.get('draggable') == true then
                         local prop = e.get('prop')
+
                         -- and is within bounds
+                        local mouse_x, mouse_y = Mocos:pointer_coords()
                         if prop:inside(mouse_x, mouse_y) then
                             -- move the prop
                             local delta_x = x - Mocos.shared.last_x
