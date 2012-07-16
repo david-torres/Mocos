@@ -15,7 +15,7 @@ object that can have functionality applied to it in the form of components.
 
 This entity's prop could be an image
 
-	entity.add(Mocos.Component.Image, {image_path='', width=0, height=0})
+    entity.add(Mocos.Component.Image, {image_path='', width=0, height=0})
 
 Or a filled rectangle
 
