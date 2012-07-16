@@ -244,7 +244,7 @@ end
 -- @param table self
 --
 function Mocos.Components.Draggable(arg, self)
-    if Mocos.is_drag_enabled ~= true then
+    if Mocos.shared.is_drag_enabled ~= true then
 
         -- initialize Draggable Component
         Mocos.shared.is_drag_enabled = true
@@ -320,8 +320,6 @@ function Mocos.Components.Draggable(arg, self)
     -- entity properties
     self.draggable = true
     self.drop_callback = arg[2]
-    self.last_x = 0
-    self.last_y = 0
 end
 
 --
