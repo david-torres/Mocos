@@ -1,7 +1,7 @@
 --
--- Basalt, a high-level entity-component system for Moai SDK
+-- Mocos, a high-level entity-component system for Moai SDK
 --
-Basalt = {
+Mocos = {
     -- shared bucket for component variables
     shared = {},
 
@@ -21,10 +21,10 @@ Basalt = {
 -- @param int height The height of the window and viewport
 -- @param string name The name of the window
 --
-function Basalt:init(width, height, name)
+function Mocos:init(width, height, name)
 
     if name == nil then
-        name = 'Basalt'
+        name = 'Mocos'
     end
     MOAISim.openWindow(name, width, height)
 
@@ -43,8 +43,8 @@ function Basalt:init(width, height, name)
     -- @param bool down True if the left mouse button is down
     --
     local mouseleft = function(down)
-        for i = 1, #Basalt.mouseleft_callback_stack do
-            Basalt.mouseleft_callback_stack[i](down)
+        for i = 1, #Mocos.mouseleft_callback_stack do
+            Mocos.mouseleft_callback_stack[i](down)
         end
     end
 
@@ -55,8 +55,8 @@ function Basalt:init(width, height, name)
     -- @param int x,y The x,y coordinates of the pointer
     --
     local pointer = function(x, y)
-        for i = 1, #Basalt.pointer_callback_stack do
-            Basalt.pointer_callback_stack[i](x, y)
+        for i = 1, #Mocos.pointer_callback_stack do
+            Mocos.pointer_callback_stack[i](x, y)
         end
     end
 
@@ -70,7 +70,7 @@ end
 -- @param int g Value from 0-255 representing green
 -- @param int b Value from 0-255 representing blue
 --
-function Basalt:background_color(r, g, b)
+function Mocos:background_color(r, g, b)
 
     local color = MOAIColor.new()
     color:setColor(r, g, b, 1)
@@ -81,23 +81,23 @@ end
 -- Capture the current coordinates of the pointer
 -- @return int x,y The x,y coordinates of the pointer
 --
-function Basalt:pointer_coords()
+function Mocos:pointer_coords()
      return layer:wndToWorld(MOAIInputMgr.device.pointer:getLoc())
 end
 
 
 
 --
--- Components supported by Basalt
+-- Components supported by Mocos
 --
-Basalt.Components = {}
+Mocos.Components = {}
 
 --
 -- Creates an image prop and adds it to the layer
 -- @param table arg
 -- @param table self
 --
-function Basalt.Components.Image(arg, self)
+function Mocos.Components.Image(arg, self)
 
     local image_path = arg[2]['image_path']
     local width = arg[2]['width']
@@ -110,20 +110,20 @@ function Basalt.Components.Image(arg, self)
     local prop = nil
 
     -- re-use deck if possible
-    if Basalt.decks[image_path] == nil then
+    if Mocos.decks[image_path] == nil then
         deck = MOAIGfxQuad2D.new()
         deck:setTexture(image_path)
         deck:setRect(-width_half, -height_half, width_half, height_half)
-        Basalt.decks[image_path] = deck
+        Mocos.decks[image_path] = deck
     else
-        deck = Basalt.decks[image_path]
+        deck = Mocos.decks[image_path]
     end
 
     self.prop = MOAIProp2D.new()
     self.prop:setDeck(deck)
     layer:insertProp(self.prop)
 
-    table.insert(Basalt.props, self.prop)
+    table.insert(Mocos.props, self.prop)
 end
 
 --
@@ -131,7 +131,7 @@ end
 -- @param table arg
 -- @param table self
 --
-function Basalt.Components.Rect(arg, self)
+function Mocos.Components.Rect(arg, self)
 
     self.width = arg[2]['width']
     self.height = arg[2]['height']
@@ -154,13 +154,13 @@ function Basalt.Components.Rect(arg, self)
     local rect_deck = MOAIScriptDeck.new()
     rect_deck:setRect(-x, -y, x, y)
     rect_deck:setDrawCallback(draw_rect)
-    table.insert(Basalt.decks, rect_deck)
+    table.insert(Mocos.decks, rect_deck)
 
     self.prop = MOAIProp2D.new()
     self.prop:setDeck(rect_deck)
     layer:insertProp(self.prop)
 
-    table.insert(Basalt.props, self.prop)
+    table.insert(Mocos.props, self.prop)
 end
 
 --
@@ -168,7 +168,7 @@ end
 -- @param table arg
 -- @param table self
 --
-function Basalt.Components.Circle(arg, self)
+function Mocos.Components.Circle(arg, self)
 
     self.radius = arg[2]['radius']
     self.steps = arg[2]['steps']
@@ -188,12 +188,12 @@ function Basalt.Components.Circle(arg, self)
     local circle_deck = MOAIScriptDeck.new()
     circle_deck:setRect(-64, -64, 64, 64)
     circle_deck:setDrawCallback(draw_circle)
-    table.insert(Basalt.decks, circle_deck)
+    table.insert(Mocos.decks, circle_deck)
 
     self.prop = MOAIProp2D.new()
     self.prop:setDeck(circle_deck)
     layer:insertProp(self.prop)
-    table.insert(Basalt.props, self.prop)
+    table.insert(Mocos.props, self.prop)
 end
 
 --
@@ -201,11 +201,11 @@ end
 -- @param table arg
 -- @param table self
 --
-function Basalt.Components.Click(arg, self)
-    if Basalt.shared.is_click_enabled ~= true then
+function Mocos.Components.Click(arg, self)
+    if Mocos.shared.is_click_enabled ~= true then
 
         -- initialize Click Component
-        Basalt.shared.is_click_enabled = true
+        Mocos.shared.is_click_enabled = true
 
         --
         -- checks for clickable entities and triggers callbacks if clicks 
@@ -214,13 +214,13 @@ function Basalt.Components.Click(arg, self)
         --
         local click_func = function(down)
             if (down) or (isDown) then
-                for i = 1, #Basalt.entities do
-                    local e = Basalt.entities[i]
+                for i = 1, #Mocos.entities do
+                    local e = Mocos.entities[i]
                     -- we have somthing clickable
                     if e.get('click') == true then
                         -- check bounds
                         local prop = e.get('prop')
-                        local mouse_x, mouse_y = Basalt.pointer_coords()
+                        local mouse_x, mouse_y = Mocos.pointer_coords()
                         if prop:inside(mouse_x, mouse_y) then
                             e.get('click_callback')()
                         end
@@ -229,7 +229,7 @@ function Basalt.Components.Click(arg, self)
             end
         end
 
-        table.insert(Basalt.mouseleft_callback_stack, click_func)
+        table.insert(Mocos.mouseleft_callback_stack, click_func)
     end
 
     -- entity properties
@@ -243,15 +243,15 @@ end
 -- @param table arg
 -- @param table self
 --
-function Basalt.Components.Draggable(arg, self)
-    if Basalt.is_drag_enabled ~= true then
+function Mocos.Components.Draggable(arg, self)
+    if Mocos.is_drag_enabled ~= true then
 
         -- initialize Draggable Component
-        Basalt.shared.is_drag_enabled = true
+        Mocos.shared.is_drag_enabled = true
 
-        Basalt.shared.is_dragging = false
-        Basalt.shared.last_x = 0
-        Basalt.shared.last_y = 0
+        Mocos.shared.is_dragging = false
+        Mocos.shared.last_x = 0
+        Mocos.shared.last_y = 0
 
         --
         -- checks for draggable entities and triggers drag if within bounds
@@ -259,21 +259,21 @@ function Basalt.Components.Draggable(arg, self)
         --
         local drag_left_click_event = function(down)
             -- check if we are dragging
-            Basalt.shared.is_dragging = false
+            Mocos.shared.is_dragging = false
             if down or isDown then
                 -- get current pointer position
-                local mouse_x, mouse_y = Basalt:pointer_coords()
+                local mouse_x, mouse_y = Mocos:pointer_coords()
 
                 -- check each entity
-                for i = 1, #Basalt.entities do
-                    local e = Basalt.entities[i]
+                for i = 1, #Mocos.entities do
+                    local e = Mocos.entities[i]
 
                     -- if it has draggable
                     if e.get('draggable') == true then
                         local prop = e.get('prop')
                         -- and is within bounds
                         if prop:inside(mouse_x, mouse_y) then
-                            Basalt.shared.is_dragging = true
+                            Mocos.shared.is_dragging = true
                         end
                     end
                 end
@@ -287,13 +287,13 @@ function Basalt.Components.Draggable(arg, self)
         --
         local drag_mouse_move_event = function(x, y)
             -- check if we are dragging
-            if Basalt.shared.is_dragging then
+            if Mocos.shared.is_dragging then
 
-                local mouse_x, mouse_y = Basalt:pointer_coords()
+                local mouse_x, mouse_y = Mocos:pointer_coords()
 
                 -- check each entity
-                for i = 1, #Basalt.entities do
-                    local e = Basalt.entities[i]
+                for i = 1, #Mocos.entities do
+                    local e = Mocos.entities[i]
 
                     -- if it has draggable
                     if e.get('draggable') == true then
@@ -301,20 +301,20 @@ function Basalt.Components.Draggable(arg, self)
                         -- and is within bounds
                         if prop:inside(mouse_x, mouse_y) then
                             -- move the prop
-                            local delta_x = x - Basalt.shared.last_x
-                            local delta_y = y - Basalt.shared.last_y
+                            local delta_x = x - Mocos.shared.last_x
+                            local delta_y = y - Mocos.shared.last_y
                             prop:moveLoc(delta_x, -delta_y, 0, 0, MOAIEaseType.FLAT)
                         end
                     end
                 end
             end
 
-            Basalt.shared.last_x = x
-            Basalt.shared.last_y = y
+            Mocos.shared.last_x = x
+            Mocos.shared.last_y = y
         end
 
-        table.insert(Basalt.mouseleft_callback_stack, drag_left_click_event)
-        table.insert(Basalt.pointer_callback_stack, drag_mouse_move_event)
+        table.insert(Mocos.mouseleft_callback_stack, drag_left_click_event)
+        table.insert(Mocos.pointer_callback_stack, drag_mouse_move_event)
     end
 
     -- entity properties
@@ -329,14 +329,14 @@ end
 -- @param table arg
 -- @param table self
 --
-function Basalt.Components.Collide(arg, self)
+function Mocos.Components.Collide(arg, self)
     -- TODO: implement this... Box2D?
 end
 
 --
 -- The base entity
 --
-function Basalt:entity()
+function Mocos:entity()
     --
     -- entity data goes in here
     --
@@ -385,7 +385,7 @@ function Basalt:entity()
     }
 
     -- add it to the list of known entities
-    table.insert(Basalt.entities, e)
+    table.insert(Mocos.entities, e)
 
     return e
 end

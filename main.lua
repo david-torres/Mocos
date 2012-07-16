@@ -1,11 +1,11 @@
-require 'Basalt'
+require 'Mocos'
 
-Basalt:init(320, 480)
-Basalt:background_color(255, 0, 0)
+Mocos:init(320, 480)
+Mocos:background_color(255, 0, 0)
 
 -- could easily use a background image instead
--- bg = Basalt:entity()
--- bg.add(Basalt.Components.Image, {image_path, width, height})
+-- bg = Mocos:entity()
+-- bg.add(Mocos.Components.Image, {image_path, width, height})
 
 happy_face = {
     image_path = 'happy-face.png',
@@ -14,18 +14,18 @@ happy_face = {
 }
 
 -- Click test
-entity = Basalt:entity()
-entity.add(Basalt.Components.Image, happy_face)
+entity = Mocos:entity()
+entity.add(Mocos.Components.Image, happy_face)
 entity.get('prop'):setLoc(-50, 50)
-entity.add(Basalt.Components.Click, function()
+entity.add(Mocos.Components.Click, function()
     print('Click Entity #1')
 end)
 
 -- Draggable test
-entity2 = Basalt:entity()
-entity2.add(Basalt.Components.Image, happy_face)
+entity2 = Mocos:entity()
+entity2.add(Mocos.Components.Image, happy_face)
 entity2.get('prop'):setLoc(50, 50)
-entity2.add(Basalt.Components.Draggable)
+entity2.add(Mocos.Components.Draggable)
 
 -- Rect test
 rect = {
@@ -35,10 +35,10 @@ rect = {
     g = 130,
     b = 130,
 }
-entity3 = Basalt.entity()
-entity3.add(Basalt.Components.Rect, rect)
+entity3 = Mocos.entity()
+entity3.add(Mocos.Components.Rect, rect)
 entity3.get('prop'):setLoc(-50, -50)
-entity3.add(Basalt.Components.Click, function()
+entity3.add(Mocos.Components.Click, function()
     print('Click Entity #3')
 end)
 
@@ -50,7 +50,7 @@ circle = {
     g = 130,
     b = 130,
 }
-entity4 = Basalt:entity()
-entity4.add(Basalt.Components.Circle, circle)
+entity4 = Mocos:entity()
+entity4.add(Mocos.Components.Circle, circle)
 entity4.get('prop'):setLoc(50, -50)
-entity4.add(Basalt.Components.Draggable)
+entity4.add(Mocos.Components.Draggable)
